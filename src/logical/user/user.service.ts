@@ -53,7 +53,6 @@ export class UserService {
         msg: '用户已存在',
       };
     }
-    cosnt salt =
     const salt = makeSalt(); // 制作密码盐
     const hashPwd = encryptPassword(password, salt);  // 加密密码
     const registerSQL = `
