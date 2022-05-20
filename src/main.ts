@@ -5,6 +5,7 @@ import { logger } from './middleware/logger.middleware';
 import { TransformInterceptor } from './interceptor/transform.interceptor';
 import { HttpExceptionFilter } from './filter/http-exception.filter';
 import { AnyExceptionFilter } from './filter/any-exception.filter';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,6 +17,17 @@ async function bootstrap() {
   app.useGlobalFilters(new AnyExceptionFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(logger);
+
+  // 配置 Swagger
+  const options = new DocumentBuilder()
+    .addBearerAuth() // 开启 BearerAuth 授权认证
+    .setTitle('bookAdmin')
+    .setDescription('The bookAdmin API description')
+    .setVersion('1.0')
+    .addTag('book-admin')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  !process.env.NODE_ENV ? SwaggerModule.setup('api-doc', app, document) : '';
   await app.listen(3000);
 }
 bootstrap();
