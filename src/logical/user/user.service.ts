@@ -20,7 +20,7 @@ export class UserService {
         admin_user
       WHERE
         account_name = '${username}'
-    `; // 一段平淡无奇的 SQL 查询语句
+    `;
     try {
       const user = (await sequelize.query(sql, {
           type: Sequelize.QueryTypes.SELECT, // 查询方式
