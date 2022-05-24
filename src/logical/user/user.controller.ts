@@ -20,6 +20,11 @@ export class UserController {
   findOne(@Body() body: any) {
     return this.usersService.findOne(body.username);
   }
+
+  @Post('info')
+  getInfo(@Body() body: any) {
+    return this.usersService.getInfo(body.username);
+  }
   // JWT验证 - Step 1: 用户请求登录
   @Post('login')
   @ApiBody({
@@ -28,7 +33,10 @@ export class UserController {
   })
   async login(@Body() loginParmas: LoginDTO) {
     console.log('JWT验证 - Step 1: 用户请求登录');
-    const authResult = await this.authService.validateUser(loginParmas.username, loginParmas.password);
+    const authResult = await this.authService.validateUser(
+      loginParmas.username,
+      loginParmas.password,
+    );
     switch (authResult.code) {
       case 1:
         return this.authService.certificate(authResult.user);
@@ -47,7 +55,7 @@ export class UserController {
   @UsePipes(new ValidationPipe())
   @UseGuards(AuthGuard('jwt')) // 使用 'JWT' 进行验证
   @Post('register')
-  async register(@Body() body: RegisterInfoDTO) {
+  async register(@Body() body) {
     return await this.usersService.register(body);
   }
 }
