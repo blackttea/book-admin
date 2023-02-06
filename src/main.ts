@@ -7,6 +7,8 @@ import { HttpExceptionFilter } from './filter/http-exception.filter';
 import { AnyExceptionFilter } from './filter/any-exception.filter';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
+const bodyParser = require('body-parser');
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api'); // 全局路由前缀
@@ -17,7 +19,8 @@ async function bootstrap() {
   app.useGlobalFilters(new AnyExceptionFilter());
   app.useGlobalFilters(new HttpExceptionFilter());
   app.use(logger);
-
+  app.use(express.json({ limit: '2100000kb' }));
+  app.use(bodyParser.json({ limit: '9100000kb' }));
   // 配置 Swagger
   const options = new DocumentBuilder()
     .addBearerAuth() // 开启 BearerAuth 授权认证

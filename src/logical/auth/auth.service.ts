@@ -70,7 +70,7 @@ export class AuthService {
       FROM
         sys_menu
       WHERE
-        role <= ${role}
+        role >= ${role}
     `;
     try {
       const menu: Array<menuItem> = await sequelize.query(sql, {
